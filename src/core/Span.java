@@ -32,7 +32,7 @@ import com.stumbleupon.async.Deferred;
  * <p>
  * This class stores a continuous sequence of {@link RowSeq}s in memory.
  */
-final class Span implements DataPoints {
+public final class Span implements DataPoints {
 
   /** The {@link TSDB} instance we belong to. */
   private final TSDB tsdb;
@@ -658,6 +658,10 @@ final class Span implements DataPoints {
      return buf.toString();
     }
 
+  }
+
+  public Map<String, String> getInclusiveTags() {
+    return (Collections.unmodifiableMap(rows.get(0).getTags()));
   }
 
 }
