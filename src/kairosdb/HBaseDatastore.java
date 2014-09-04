@@ -57,6 +57,7 @@ public class HBaseDatastore implements Datastore
 			config.overrideConfig("tsd.storage.hbase.zk_basedir", zkBase);
 			config.overrideConfig("tsd.storage.hbase.data_table", timeSeriesTable);
 			config.overrideConfig("tsd.storage.hbase.uid_table", uidTable);
+			config.overrideConfig("tsd.storage.enable_compaction", "false");
 
 			m_tsdb = new TSDB(config);
 		} catch (IOException e) {
