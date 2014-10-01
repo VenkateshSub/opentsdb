@@ -4,6 +4,12 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>7</version>
+  </parent>
+
   <groupId>net.opentsdb</groupId>
   <artifactId>opentsdb</artifactId>
   <version>2.0.0</version>
@@ -58,13 +64,50 @@
   </developers>
   <inceptionYear>2010</inceptionYear>
 
-  <packaging>jar</packaging>
+  <packaging>bundle</packaging>
 
   <build>
     <sourceDirectory>src-main</sourceDirectory>
     <testSourceDirectory>src-test</testSourceDirectory>
 
     <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <version>2.3.7</version>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+            <Bundle-Name>${project.name}</Bundle-Name>
+            <Bundle-Version>${project.version}</Bundle-Version>
+            <Embed-Dependency>*;artifactId=!guava</Embed-Dependency>
+            <Embed-Transitive>true</Embed-Transitive>
+            <Bundle-Classpath>.</Bundle-Classpath>
+            <Export-Package>
+              net.opentsdb.*; version="2.0.0",
+              org.kairosdb.*; version="0.9.4-SNAPSHOT",
+              com.stumbleupon.*; version="1.4.0",
+              org.jboss.netty.*; version="3.9.1.Final",
+              org.apache.zookeeper.*;version="3.4.5",
+              com.google.protobuf.*;version="2.5.0",
+              org.hbase.async.*;version="1.5.0"
+            </Export-Package>
+            <Import-Package>org.apache.zookeeper.server;resolution:=optional;version="3.4.5",
+                    org.hbase.async.*;resolution:=optional;version="1.5.0",
+                    com.google.protobuf.*;resolution:=optional;version="2.5.0",
+                    org.kairosdb.*; resolution:=optional;version="0.9.4-SNAPSHOT",
+                    net.opentsdb.*; resolution:=optional;version="2.0.0",
+                    com.stumbleupon.*; resolution:=optional;version="1.4.0",
+                    org.jboss.netty.*; version="3.9.1.Final",
+                    *;resolution:=optional
+            </Import-Package>
+          </instructions>
+        </configuration>
+        <goals>
+          <goal>bundleall</goal>
+        </goals>
+      </plugin>
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -219,7 +262,7 @@
         </configuration>
       </plugin>
 
-      <plugin>
+<!--  <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
         <version>2.6.0</version>
@@ -235,7 +278,7 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
+      </plugin> -->
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -273,7 +316,7 @@
         </configuration>
       </plugin>
 
-      <plugin>
+<!--  <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-gpg-plugin</artifactId>
         <version>1.4</version>
@@ -289,7 +332,7 @@
         <configuration>
           <keyname>tsunanet@gmail.com</keyname>
         </configuration>
-      </plugin>
+      </plugin> -->
 
     </plugins>
   </build>
@@ -335,7 +378,7 @@
     <dependency>
       <groupId>org.apache.zookeeper</groupId>
       <artifactId>zookeeper</artifactId>
-      <version>3.3.6</version>
+      <version>3.4.5</version>
       <exclusions>
         <exclusion>
           <groupId>log4j</groupId>
@@ -363,9 +406,15 @@
     </dependency>
 
     <dependency>
-      <groupId>org.hbase</groupId>
+      <groupId>com.ge.predix</groupId>
       <artifactId>asynchbase</artifactId>
       <version>1.5.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.protobuf</groupId>
+      <artifactId>protobuf-java</artifactId>
+      <version>2.5.0</version>
     </dependency>
 
     <!-- runtime dependencies -->
@@ -465,10 +514,6 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
-  <parent>
-    <groupId>org.sonatype.oss</groupId>
-    <artifactId>oss-parent</artifactId>
-    <version>7</version>
-  </parent>
+
 
 </project>
