@@ -36,47 +36,56 @@ public class KTsdbQuery
 		}
 
 	public void run(QueryCallback cachedSearchResult) throws IOException
-		{
+    {
 
-		TreeMap<byte[], Span> spanMap;
-		try {
-			spanMap = tsdbQuery.findSpans().join();
-		} catch (HBaseException e) {
-			throw new IOException ("HBaseException when fetching the data: " + e.getMessage(), e);
-		} catch (InterruptedException e) {
-			throw new IOException ("InterruptedException when fetching the data: " + e.getMessage(), e);
-		} catch (Exception e) {
-			throw new IOException ("Exception occurred when fetching the data: " + e.getMessage(), e);
-		}
+        TreeMap<byte[], Span> spanMap;
+        try {
+            spanMap = tsdbQuery.findSpans().join();
+        } catch (HBaseException e) {
+            throw new IOException ("HBaseException when fetching the data: " + e.getMessage(), e);
+        } catch (InterruptedException e) {
+            throw new IOException ("InterruptedException when fetching the data: " + e.getMessage(), e);
+        } catch (Exception e) {
+            throw new IOException ("Exception occurred when fetching the data: " + e.getMessage(), e);
+        }
 
-		if (spanMap != null)
-			{
-			for(Span span : spanMap.values())
-				{
-				cachedSearchResult.startDataPointSet("long", span.getInclusiveTags());
-				for (DataPoint dataPoint : span)
-					{
-					if (dataPoint.timestamp() < m_startTime || dataPoint.timestamp() > m_endTime)
-						{
-						// Remove data points not in the time range
-						continue;
-						}
-	
-					//Convert timestamps back to milliseconds
-					if (dataPoint.isInteger())
-						{
-						cachedSearchResult.addDataPoint(dataPoint.timestamp(), dataPoint.longValue());
-						}
-					else
-						{
-						cachedSearchResult.addDataPoint(dataPoint.timestamp(), dataPoint.doubleValue());
-						}
-					}
-				}
-	
-			cachedSearchResult.endDataPoints();
-			}
-		}
+        if (spanMap != null)
+        {
+            String type = "long";
+            for(Span span : spanMap.values()) {
+
+                cachedSearchResult.startDataPointSet(type, span.getInclusiveTags());
+//                if (span.isInteger(0)) {
+//                    cachedSearchResult.startDataPointSet("long", span.getInclusiveTags());
+//                } else {
+//                    cachedSearchResult.startDataPointSet("double", span.getInclusiveTags());
+//                }
+                for (DataPoint dataPoint : span) {
+                    if (dataPoint.timestamp() < m_startTime || dataPoint.timestamp() > m_endTime) {
+                        // Remove data points not in the time range
+                        continue;
+                    }
+
+                    //Convert timestamps back to milliseconds
+                    if (dataPoint.isInteger() && type.equals("long")) {
+                        cachedSearchResult.addDataPoint(dataPoint.timestamp(), dataPoint.longValue());
+                    } else if (dataPoint.isInteger() && type.equals("double")) {
+                        type = "long";
+                        cachedSearchResult.startDataPointSet(type, span.getInclusiveTags());
+                        cachedSearchResult.addDataPoint(dataPoint.timestamp(), dataPoint.longValue());
+                    } else if (type.equals("double")) {
+                        cachedSearchResult.addDataPoint(dataPoint.timestamp(), dataPoint.doubleValue());
+                    } else {
+                        type = "double";
+                        cachedSearchResult.startDataPointSet(type, span.getInclusiveTags());
+                        cachedSearchResult.addDataPoint(dataPoint.timestamp(), dataPoint.doubleValue());
+                    }
+                }
+                cachedSearchResult.endDataPoints();
+
+            }
+        }
+    }
 
 	private Map<String, String> createMapOfTags(SetMultimap<String, String> tags)
 		{
