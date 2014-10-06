@@ -50,31 +50,35 @@ public class KTsdbQuery
 		}
 
 		if (spanMap != null)
-			{
-			for(Span span : spanMap.values())
-				{
-				cachedSearchResult.startDataPointSet("long", span.getInclusiveTags());
-				for (DataPoint dataPoint : span)
-					{
-					if (dataPoint.timestamp() < m_startTime || dataPoint.timestamp() > m_endTime)
-						{
+		{
+			String type = "long";
+			for(Span span : spanMap.values()) {
+
+				cachedSearchResult.startDataPointSet(type, span.getInclusiveTags());
+				for (DataPoint dataPoint : span) {
+					if (dataPoint.timestamp() < m_startTime || dataPoint.timestamp() > m_endTime) {
 						// Remove data points not in the time range
 						continue;
-						}
-	
+					}
+
 					//Convert timestamps back to milliseconds
-					if (dataPoint.isInteger())
-						{
+					if (dataPoint.isInteger() && type.equals("long")) {
 						cachedSearchResult.addDataPoint(dataPoint.timestamp(), dataPoint.longValue());
-						}
-					else
-						{
+					} else if (dataPoint.isInteger() && type.equals("double")) {
+						type = "long";
+						cachedSearchResult.startDataPointSet(type, span.getInclusiveTags());
+						cachedSearchResult.addDataPoint(dataPoint.timestamp(), dataPoint.longValue());
+					} else if (type.equals("double")) {
 						cachedSearchResult.addDataPoint(dataPoint.timestamp(), dataPoint.doubleValue());
-						}
+					} else {
+						type = "double";
+						cachedSearchResult.startDataPointSet(type, span.getInclusiveTags());
+						cachedSearchResult.addDataPoint(dataPoint.timestamp(), dataPoint.doubleValue());
 					}
 				}
-	
-			cachedSearchResult.endDataPoints();
+				cachedSearchResult.endDataPoints();
+
+			}
 			}
 		}
 
