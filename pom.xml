@@ -9,10 +9,10 @@
     <artifactId>oss-parent</artifactId>
     <version>7</version>
   </parent>
-
+  
   <groupId>net.opentsdb</groupId>
   <artifactId>opentsdb</artifactId>
-  <version>2.0.0</version>
+  <version>2.0.0-4</version>
   <name>OpenTSDB</name>
   <organization>
     <name>The OpenTSDB Authors</name>
@@ -71,43 +71,43 @@
     <testSourceDirectory>src-test</testSourceDirectory>
 
     <plugins>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <version>2.3.7</version>
-        <extensions>true</extensions>
-        <configuration>
-          <instructions>
-            <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-            <Bundle-Name>${project.name}</Bundle-Name>
-            <Bundle-Version>${project.version}</Bundle-Version>
-            <Embed-Dependency>*;artifactId=!guava</Embed-Dependency>
-            <Embed-Transitive>true</Embed-Transitive>
-            <Bundle-Classpath>.</Bundle-Classpath>
-            <Export-Package>
-              net.opentsdb.*; version="2.0.0",
-              org.kairosdb.*; version="0.9.4-SNAPSHOT",
-              com.stumbleupon.*; version="1.4.0",
-              org.jboss.netty.*; version="3.9.1.Final",
-              org.apache.zookeeper.*;version="3.4.5",
-              com.google.protobuf.*;version="2.5.0",
-              org.hbase.async.*;version="1.5.0"
-            </Export-Package>
-            <Import-Package>org.apache.zookeeper.server;resolution:=optional;version="3.4.5",
-                    org.hbase.async.*;resolution:=optional;version="1.5.0",
-                    com.google.protobuf.*;resolution:=optional;version="2.5.0",
-                    org.kairosdb.*; resolution:=optional;version="0.9.4-SNAPSHOT",
-                    net.opentsdb.*; resolution:=optional;version="2.0.0",
-                    com.stumbleupon.*; resolution:=optional;version="1.4.0",
-                    org.jboss.netty.*; version="3.9.1.Final",
-                    *;resolution:=optional
-            </Import-Package>
-          </instructions>
-        </configuration>
-        <goals>
-          <goal>bundleall</goal>
-        </goals>
-      </plugin>
+    	<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<version>2.3.7</version>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+						<Bundle-Name>${project.name}</Bundle-Name>
+						<Bundle-Version>${project.version}</Bundle-Version>
+						<Embed-Dependency>*;artifactId=!guava</Embed-Dependency>
+						<Embed-Transitive>true</Embed-Transitive>
+						<Bundle-Classpath>.</Bundle-Classpath>
+						<Export-Package>
+							net.opentsdb.*; version="2.0.0",
+							org.kairosdb.*; version="0.9.4-SNAPSHOT",
+							com.stumbleupon.*; version="1.4.0",
+							org.jboss.netty.*; version="3.9.1.Final",
+							org.apache.zookeeper.*;version="3.4.5",
+							com.google.protobuf.*;version="2.5.0",
+							org.hbase.async.*;version="1.5.0"
+						</Export-Package>
+						<Import-Package>org.apache.zookeeper.server;resolution:=optional;version="3.4.5",
+										org.hbase.async.*;resolution:=optional;version="1.5.0",
+										com.google.protobuf.*;resolution:=optional;version="2.5.0",
+										org.kairosdb.*; resolution:=optional;version="0.9.4-SNAPSHOT",
+										net.opentsdb.*; resolution:=optional;version="2.0.0",
+										com.stumbleupon.*; resolution:=optional;version="1.4.0",
+										org.jboss.netty.*; version="3.9.1.Final",
+										*;resolution:=optional
+						</Import-Package>
+					</instructions>
+				</configuration>
+				<goals>
+					<goal>bundleall</goal>
+				</goals>
+			</plugin>
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -262,23 +262,23 @@
         </configuration>
       </plugin>
 
-<!--  <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>gwt-maven-plugin</artifactId>
-        <version>2.6.0</version>
-        <executions>
-          <execution>
-            <configuration>
-              <enableAssertions>true</enableAssertions>
-              <module>tsd.QueryUi</module>
-            </configuration>
-            <phase>compile</phase>
-            <goals>
-              <goal>compile</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin> -->
+<!--       <plugin> -->
+<!--         <groupId>org.codehaus.mojo</groupId> -->
+<!--         <artifactId>gwt-maven-plugin</artifactId> -->
+<!--         <version>2.6.0</version> -->
+<!--         <executions> -->
+<!--           <execution> -->
+<!--             <configuration> -->
+<!--               <enableAssertions>true</enableAssertions> -->
+<!--               <module>tsd.QueryUi</module> -->
+<!--             </configuration> -->
+<!--             <phase>compile</phase> -->
+<!--             <goals> -->
+<!--               <goal>compile</goal> -->
+<!--             </goals> -->
+<!--           </execution> -->
+<!--         </executions> -->
+<!--       </plugin> -->
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -316,23 +316,23 @@
         </configuration>
       </plugin>
 
-<!--  <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-gpg-plugin</artifactId>
-        <version>1.4</version>
-        <executions>
-         <execution>
-            <id>sign-artifacts</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>sign</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <keyname>tsunanet@gmail.com</keyname>
-        </configuration>
-      </plugin> -->
+<!--       <plugin> -->
+<!--         <groupId>org.apache.maven.plugins</groupId> -->
+<!--         <artifactId>maven-gpg-plugin</artifactId> -->
+<!--         <version>1.4</version> -->
+<!--         <executions> -->
+<!--          <execution> -->
+<!--             <id>sign-artifacts</id> -->
+<!--             <phase>verify</phase> -->
+<!--             <goals> -->
+<!--               <goal>sign</goal> -->
+<!--             </goals> -->
+<!--           </execution> -->
+<!--         </executions> -->
+<!--         <configuration> -->
+<!--           <keyname>tsunanet@gmail.com</keyname> -->
+<!--         </configuration> -->
+<!--       </plugin> -->
 
     </plugins>
   </build>
@@ -410,12 +410,12 @@
       <artifactId>asynchbase</artifactId>
       <version>1.5.0</version>
     </dependency>
-
+    
     <dependency>
-      <groupId>com.google.protobuf</groupId>
-      <artifactId>protobuf-java</artifactId>
-      <version>2.5.0</version>
-    </dependency>
+		<groupId>com.google.protobuf</groupId>
+		<artifactId>protobuf-java</artifactId>
+		<version>2.5.0</version>
+	</dependency>
 
     <!-- runtime dependencies -->
 
